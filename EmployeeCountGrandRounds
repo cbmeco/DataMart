@@ -1,0 +1,19 @@
+select a.*, b.Employees
+
+from [dbo].[GR_Engagement] a
+
+left join(
+Select E.Emp_State, count(distinct E.Emp_SSN) as Employees from [dbo].[WTW_Employee_Dependents] as D  --158384
+right join [dbo].[WTW_Employee_Eligibility] As E
+on D.Emp_SSN = E.Emp_SSN  ----158270
+right join [dbo].[WTW_Employee_Elections] as T
+on Cast(E.Emp_SSN as varchar) = Cast( T.Emp_SSN as varchar)
+where (Option_ID ='200' or Option_ID ='215'  or Option_ID ='237' or Option_ID ='233'
+             or Option_ID ='232' or Option_ID ='231' or Option_ID ='610' or Option_ID ='615'  or
+             Option_ID ='605' or Option_ID ='620' or Option_ID ='621' or Option_ID ='622' )and E.Emp_Type = '3' 
+
+ 
+
+group by E.Emp_State
+) b
+on a.State = b.Emp_State
