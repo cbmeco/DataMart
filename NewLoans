@@ -1,0 +1,53 @@
+select base_loan.*, hard.hardship_cnt, pop.Total_EEs
+from (
+
+select 
+datename(m,[Loan1_Origination_Date])+ '-' + cast(datepart(yyyy,[Loan1_Origination_Date])as varchar) as Loan_MonthYear, 
+work_location,
+count(distinct [PERNER]) as loan_cnt
+
+from (
+select  a.*, b.[Work_Location]
+
+from [dbo].[Fidelity_EE] a
+left join (select distinct [PERNR], [Work_Location] from [dbo].[HRIS_Employee]) b
+on a.[PERNER] = b.[PERNR]
+where Plan_Code = '28024 - Comcast' ) as sub
+group by datename(m,[Loan1_Origination_Date])+ '-' + cast(datepart(yyyy,[Loan1_Origination_Date])as varchar), work_location 
+ ) as base_loan
+
+left join
+(select 
+datename(m,[Hardship_Date])+ '-' + cast(datepart(yyyy,[Hardship_Date])as varchar) as hardship_MonthYear, 
+work_location,
+count(distinct [PERNER]) as hardship_cnt
+
+from (
+select  a.*, b.[Work_Location]
+
+from [dbo].[Fidelity_EE] a
+left join (select distinct [PERNR], [Work_Location] from [dbo].[HRIS_Employee]) b
+on a.[PERNER] = b.[PERNR]
+where Plan_Code = '28024 - Comcast' ) as sub
+group by datename(m,[Hardship_Date])+ '-' + cast(datepart(yyyy,[Hardship_Date])as varchar), work_location) as hard
+on base_loan.Loan_MonthYear = hard.hardship_MonthYear
+and base_loan.work_location = hard.Work_Location
+
+
+left join(
+
+select work_location, count(distinct PERNER) as Total_EEs
+from(
+
+select  a.PERNER, b.[Work_Location]
+
+from [dbo].[Fidelity_EE] a
+left join (select distinct [PERNR], [Work_Location] from [dbo].[HRIS_Employee]) b
+on a.[PERNER] = b.[PERNR]
+where 
+ Plan_Code = '28024 - Comcast' 
+ and Insert_Date = '2019-12-29') as cnt
+ group by Work_Location) as pop
+ on base_loan.Work_Location = pop.Work_location
+
+order by Loan_MonthYear DESC
