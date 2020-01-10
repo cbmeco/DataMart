@@ -1,0 +1,11 @@
+## Number of STD claims and distinct EE in Year 2018 for Cognitio data validation
+SELECT
+distinct(EE_ID_from_Master),
+count(distinct file_number) as file_num_ct
+	FROM dbo.Sedgwick_Juris
+	WHERE COVERAGE_CODE = 'SD'
+	and Claim_Sub_Status <> 'Denied'
+	and Date_Disability_Benefits_Begin <> 'NULL'
+	and Date_Disability_Benefits_Begin > '2017-12-31'
+	and Date_Disability_Benefits_Begin < '2018-12-31'
+	group by EE_ID_from_Master;
