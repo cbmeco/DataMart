@@ -1,0 +1,15 @@
+#Distinct employee pernr from flexible employee report uploaded to datamart
+--87,741
+
+SELECT
+COUNT(DISTINCT EE_PERNR)
+FROM DBO.Flexible_Employee_Report;
+
+#Distinct employee pernr from flexible employee report uploaded to datamart
+--87,741
+
+SELECT
+COUNT(DISTINCT EE_PERNR)
+FROM DBO.Flexible_Employee_Report
+WHERE EE_STATUS = 'Active';
+--84,485
