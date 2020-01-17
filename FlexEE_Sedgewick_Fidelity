@@ -1,0 +1,287 @@
+#### 87+ RECORDS (left)joining fidelity + sedgewick STD data onto Flex EE##
+
+
+
+
+SELECT 
+flex.EE_PERNR,
+FIDELITY_EE.PERNER,
+FIDELITY_EE.Plan_Code,
+FIDELITY_EE.Status,
+cast(FIDELITY_EE.DOB as Date) as 'DOB',
+cast(FIDELITY_EE.DOH as Date) as 'DOH',
+(FIDELITY_EE.Current_ESPP_Rate/100) as 'Current_ESPP_Rate',
+(FIDELITY_EE.Current_QTD_ESPP_Balance/100) as 'Current_QTD_ESPP_Balance',
+FIDELITY_EE.Pre_Tax_Deferral_Percentage/100 as 'Pre_Tax_Deferral_Percentage',
+FIDELITY_EE.Catchup_Deferral_Percentage/100 as 'Catchup_Deferral_Percentage',
+FIDELITY_EE.Roth_Deferral_Percentage/100 as 'Roth_Deferral_Percentage',
+FIDELITY_EE.Roth_Catchup_Deferral_Percentage/100 as 'Roth_Catchup_Deferral_Percentage',
+FIDELITY_EE.Total_Deferral/100 as 'Total_Deferral',
+FIDELITY_EE.FIELD_401k_Balance_YTD_EE,
+FIDELITY_EE.FIELD_401k_Balance_YTD_ER,
+FIDELITY_EE.Current_401k_Balance,
+FIDELITY_EE.FIELD_401k_Balance_Rollover,
+FIDELITY_EE.FIELD_401k_Balance_EE,
+FIDELITY_EE.FIELD_401k_Balance_ER,
+FIDELITY_EE.Loan_Eligible,
+FIDELITY_EE.Current_Loan_Rate as 'Current_Loan_Rate',
+FIDELITY_EE.Loan_Available,
+cast(FIDELITY_EE.Loan1_Origination_Date as Date) as 'Loan1_Orig_Date',
+FIDELITY_EE.Loan1_Original_Loan_Amount,
+FIDELITY_EE.Loan1_Current_Outstanding_Loan_Balance,
+FIDELITY_EE.Loan1_Remaining_Loan_Payments,
+FIDELITY_EE.Loan1_Repayment_Amount,
+cast(FIDELITY_EE.Loan1_Final_Repayment_Date as Date) as 'Loan1_Final_Repay_Date',
+cast(FIDELITY_EE.Loan2_Origination_Date as Date) as 'Loan2_Orig_Date',
+FIDELITY_EE.Loan2_Original_Loan_Amount,
+FIDELITY_EE.Loan2_Current_Outstanding_Loan_Balance,
+FIDELITY_EE.Loan2_Remaining_Loan_Payments,
+FIDELITY_EE.Loan2_Repayment_Amount,
+cast(FIDELITY_EE.Loan2_Final_Repayment_Date as Date) as 'Loan2_Final_Repay_Date',
+FIDELITY_EE.Total_Count_Paid_off_Loans,
+FIDELITY_EE.Total_Amount_Paid_off_Loans,
+cast(FIDELITY_EE.Most_Recent_Loan_Paid_off_Date as Date) as'Most_Rec_Loan_PaidOFF_Date',
+FIDELITY_EE.Most_Recent_Loan_Paid_off_Amount,
+FIDELITY_EE.Total_Count_Defaulted_Loans,
+FIDELITY_EE.Toal_Amount_Defaulted_Loans,
+cast(FIDELITY_EE.Most_Recent_Loan_Default_Date as Date) as 'Most_Rec_Loan_Default_Date',
+FIDELITY_EE.Most_Recent_Loan_Default_Amount,
+FIDELITY_EE.Hardship_Eligible,
+FIDELITY_EE.Hardship_Available,
+FIDELITY_EE.Number_of_Hardships_Taken_12mos,
+FIDELITY_EE.Number_of_Hardships_Taken_Total,
+Cast (FIDELITY_EE.Hardship_Date as Date) as 'Hardship Date',
+FIDELITY_EE.Hardship_Amount,
+FIDELITY_EE.Hardship_Reason,
+FIDELITY_EE.Beneficiary_Designation,
+FIDELITY_EE.Exercisable_SO_QTY,
+FIDELITY_EE.Investment1,
+FIDELITY_EE.Pct_Investment1/100 as 'Pct_Invst_1',
+FIDELITY_EE.Investment2,
+FIDELITY_EE.Pct_Investment2/100 as 'Pct_Invst_2',
+FIDELITY_EE.Investment3,
+FIDELITY_EE.Pct_Investment3/100 as 'Pct_Invst_3',
+FIDELITY_EE.Investment4,
+FIDELITY_EE.Pct_Investment4/100 as 'Pct_Invst_4',
+FIDELITY_EE.Investment5,
+FIDELITY_EE.Pct_Investment5/100 as 'Pct_Invst_5',
+FIDELITY_EE.Investment6,
+FIDELITY_EE.Pct_Investment6/100 as 'Pct_Invst_6',
+FIDELITY_EE.Investment7,
+FIDELITY_EE.Pct_Investment7/100 as 'Pct_Invst_7',
+FIDELITY_EE.Investment8,
+FIDELITY_EE.Pct_Investment8/100 as 'Pct_Invst_8',
+FIDELITY_EE.Investment9,
+FIDELITY_EE.Pct_Investment9/100 as 'Pct_Invst_9',
+FIDELITY_EE.Investment10,
+FIDELITY_EE.Pct_Investment10/100 as 'Pct_Invst_10',
+FIDELITY_EE.Investment11,
+FIDELITY_EE.Pct_Investment11/100 as 'Pct_Invst_11',
+FIDELITY_EE.Investment12,
+FIDELITY_EE.Pct_Investment12/100 as 'Pct_Invst_12',
+FIDELITY_EE.Investment13,
+FIDELITY_EE.Pct_Investment13/100 as 'Pct_Invst_13',
+FIDELITY_EE.Investment14,
+FIDELITY_EE.Pct_Investment14/100 as 'Pct_Invst_14',
+FIDELITY_EE.Investment15,
+FIDELITY_EE.Pct_Investment15/100 as 'Pct_Invst_15',
+FIDELITY_EE.Investment16,
+FIDELITY_EE.Pct_Investment16/100 as 'Pct_Invst_16',
+FIDELITY_EE.Investment17,
+FIDELITY_EE.Pct_Investment17/100 as 'Pct_Invst_17',
+FIDELITY_EE.Investment18,
+FIDELITY_EE.Pct_Investment18/100 as 'Pct_Invst_18',
+FIDELITY_EE.Investment19,
+FIDELITY_EE.Pct_Investment19/100 as 'Pct_Invst_19',
+FIDELITY_EE.Investment20,
+FIDELITY_EE.Pct_Investment20/100 as 'Pct_Invst_20',
+FIDELITY_EE.Investment21,
+FIDELITY_EE.Pct_Investment21/100 as 'Pct_Invst_21',
+FIDELITY_EE.Investment22,
+FIDELITY_EE.Pct_Investment22/100 as 'Pct_Invst_22',
+cast(FIDELITY_EE.Insert_Date as Date) as 'Insert_Date_Fidelity',
+FIDELITY_EE.record_id,
+flex.*,
+sedg.*
+
+FROM dbo.Fidelity_EE AS FIDELITY_EE
+
+RIGHT join dbo.Flexible_Employee_Report as flex
+on FIDELITY_EE.PERNER = flex.EE_PERNR
+
+left join(
+select
+DISTINCT EE_ID_from_Master,
+sum(STD_CLASS_1) OVER (PARTITION BY EE_ID_FROM_MASTER) AS TOT_STD_CLASS_1,
+sum(STD_CLASS_2) OVER (PARTITION BY EE_ID_FROM_MASTER) AS TOT_STD_CLASS_2,
+sum(SD_COV_CODE) OVER (PARTITION BY EE_ID_FROM_MASTER) AS TOT_SD_COV_CODE,
+sum(BL_COV_CODE) OVER (PARTITION BY EE_ID_FROM_MASTER) AS TOT_BL_COV_CODE,
+sum(duration) OVER (PARTITION BY EE_ID_FROM_MASTER) AS TOT_DURATION,
+max(max_claim_total_paid) over (partition by ee_id_from_master) as Max_Claim_Tot_Paid,
+SUM(ICD_BACK_SPINE) OVER (partition by ee_id_from_master) AS ICD_BACK_SPINE,
+SUM(ICD_BLOOD_DISORDER) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_BLOOD_DISORDER,
+SUM(ICD_BREAST_DISEASE) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_BREAST_DISEASE,
+SUM(ICD_CIRCULATORY) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_CIRCULATORY,
+SUM(ICD_CIRCUM_CAUSE) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_CIRCUM_CAUSE,
+SUM(ICD_CONGENITAL) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_CONGENITAL,
+SUM(ICD_EAR_DISORDERS) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_EAR_DISORDERS,
+SUM(ICD_ENDOCRINE) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_ENDOCRINE,
+SUM(ICD_EXTERNAL_CAUSE) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_EXTERNAL_CAUSE,
+SUM(ICD_EYE_DISEASE) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_EYE_DISEASE,
+SUM(ICD_FRACTURES_SPRAINS) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_FRACTURES_SPRAINS,
+SUM(ICD_GI) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_GI,
+SUM(ICD_INFECTIOUS_DISEASE) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_INFECTIOUS_DISEASE,
+SUM(ICD_MENTAL_SUBSTANCE) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_MENTAL_SUBSTANCE,
+SUM(ICD_MSK) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_MSK,
+SUM(ICD_NEURO) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_NEURO,
+SUM(ICD_ORAL_DISEASE) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_ORAL_DISEASE,
+SUM(ICD_PELVIC_DISEASE) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_PELVIC_DISEASE,
+SUM(ICD_PREGNANCY) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_PREGNANCY,
+SUM(PARENTAL_PRIM_vs_NONPRIM) OVER (PARTITION BY EE_ID_FROM_MASTER) AS PARENTAL_PRIM_vs_NONPRIM,
+SUM(ICD_RENAL_DISEASE) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_RENAL_DISEASE,
+SUM(ICD_RESPIRATORY_DISEASE) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_RESPIRATORY_DISEASE,
+SUM(ICD_SKIN_DISEASE) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_SKIN_DISEASE,
+SUM(ICD_SYMPTOMS) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_SYMPTOMS,
+SUM(ICD_TOXIC_EXPOSURE) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_TOXIC_EXPOSURE,
+SUM(ICD_TRAUMA) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_TRAUMA,
+SUM(ICD_TUMOR) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_TUMOR,
+SUM(ICD_NULL) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_NULL,
+max(max_total_app_days) over (partition by ee_id_from_master) as Max_Tot_App_Days,
+max(max_rtw_date) over (partition by ee_id_from_master) as Max_RTW_Date,
+max(max_rtw_date_restr) over (partition by ee_id_from_master) as Max_RTW_Date_Restricted,
+case 
+	when COMPSYCH_Ref > '1' then '1'
+	else '0' end as ComPsych_Ref
+FROM (
+SELECT 
+EE_ID_from_Master,
+(File_Number),
+date_disability_benefits_begin,
+(DATEDIFF(day, date_disability_benefits_begin, date_disability_benefits_end)) as Duration,
+max(claim_total_paid) as max_claim_total_paid,
+max(Date_Hospitalized) as max_date_hosp,
+max(date_last_worked) as max_date_lw,
+CASE
+	WHEN Benefit_Plan_Description like '%Class 1' then 1
+	ELSE 0 END AS 'STD_CLASS_1',
+CASE
+	WHEN Benefit_Plan_Description like '%Class 2' then 1
+	ELSE 0 END AS 'STD_CLASS_2',
+CASE
+	WHEN Coverage_Code like 'SD' then 1
+	ELSE 0 END AS 'SD_COV_CODE',
+CASE
+	WHEN Coverage_Code like 'BL' then 1
+	ELSE 0 END AS 'BL_COV_CODE',
+CASE
+	WHEN ICD_CODE_GROUP LIKE 'BACK%' THEN 1
+	ELSE 0 END AS 'ICD_BACK_SPINE',
+CASE
+	WHEN ICD_CODE_GROUP LIKE 'BLOOD%' THEN 1
+	ELSE 0 END AS 'ICD_BLOOD_DISORDER',
+CASE
+	WHEN ICD_CODE_GROUP LIKE 'BREAST%' THEN 1
+	ELSE 0 END AS 'ICD_BREAST_DISEASE',
+CASE
+	WHEN ICD_CODE_GROUP LIKE 'CIRCULA%' THEN 1
+	ELSE 0 END AS 'ICD_CIRCULATORY',
+CASE
+	WHEN ICD_CODE_GROUP LIKE 'CIRCUMST%' THEN 1
+	ELSE 0 END AS 'ICD_CIRCUM_CAUSE',
+CASE
+	WHEN ICD_CODE_GROUP LIKE 'CONGENITAL%' THEN 1
+	ELSE 0 END AS 'ICD_CONGENITAL',
+CASE
+	WHEN ICD_CODE_GROUP LIKE 'EAR%' THEN 1
+	ELSE 0 END AS 'ICD_EAR_DISORDERS',
+CASE
+	WHEN ICD_CODE_GROUP LIKE 'ENDOCRINE%' THEN 1
+	ELSE 0 END AS 'ICD_ENDOCRINE',
+CASE
+	WHEN ICD_CODE_GROUP LIKE 'EXTERNAL%' THEN 1
+	ELSE 0 END AS 'ICD_EXTERNAL_CAUSE',
+CASE
+	WHEN ICD_CODE_GROUP LIKE 'EYE%' THEN 1
+	ELSE 0 END AS 'ICD_EYE_DISEASE',
+CASE
+	WHEN ICD_CODE_GROUP LIKE 'FRACTURES%' THEN 1
+	ELSE 0 END AS 'ICD_FRACTURES_SPRAINS',
+CASE
+	WHEN ICD_CODE_GROUP LIKE 'GASTRO%' THEN 1
+	ELSE 0 END AS 'ICD_GI',
+CASE
+	WHEN ICD_CODE_GROUP LIKE 'INFECT%' THEN 1
+	ELSE 0 END AS 'ICD_INFECTIOUS_DISEASE',
+CASE
+	WHEN ICD_CODE_GROUP LIKE 'MENTAL%' THEN 1
+	ELSE 0 END AS 'ICD_MENTAL_SUBSTANCE',
+CASE
+	WHEN ICD_CODE_GROUP LIKE 'MUSC%' THEN 1
+	ELSE 0 END AS 'ICD_MSK',
+CASE
+	WHEN ICD_CODE_GROUP LIKE 'NEURO%' THEN 1
+	ELSE 0 END AS 'ICD_NEURO',		
+CASE
+	WHEN ICD_CODE_GROUP LIKE 'ORAL%' THEN 1
+	ELSE 0 END AS 'ICD_ORAL_DISEASE',
+CASE
+	WHEN ICD_CODE_GROUP LIKE 'PELVIC%' THEN 1
+	ELSE 0 END AS 'ICD_PELVIC_DISEASE',
+CASE
+	WHEN ICD_CODE_GROUP LIKE 'PREGNANCY%' THEN 1
+	ELSE 0 END AS 'ICD_PREGNANCY',
+CASE
+	WHEN BENEFIT_PLAN LIKE '%PARENTAL%' THEN 1
+	ELSE 0 END AS 'PARENTAL_PRIM_vs_NONPRIM',
+CASE
+	WHEN ICD_CODE_GROUP LIKE 'RENAL%' THEN 1
+	ELSE 0 END AS 'ICD_RENAL_DISEASE',
+CASE
+	WHEN ICD_CODE_GROUP LIKE 'RESP%' THEN 1
+	ELSE 0 END AS 'ICD_RESPIRATORY_DISEASE',
+CASE
+	WHEN ICD_CODE_GROUP LIKE 'SKIN%' THEN 1
+	ELSE 0 END AS 'ICD_SKIN_DISEASE',
+CASE
+	WHEN ICD_CODE_GROUP LIKE 'SYMPTO%' THEN 1
+	ELSE 0 END AS 'ICD_SYMPTOMS',
+CASE
+	WHEN ICD_CODE_GROUP LIKE 'TOXIC%' THEN 1
+	ELSE 0 END AS 'ICD_TOXIC_EXPOSURE',
+CASE
+	WHEN ICD_CODE_GROUP LIKE 'TRAUMA%' THEN 1
+	ELSE 0 END AS 'ICD_TRAUMA',
+CASE
+	WHEN ICD_CODE_GROUP LIKE 'TUMOR%' THEN 1
+	ELSE 0 END AS 'ICD_TUMOR',
+CASE 
+	WHEN ICD_CODE_GROUP = 'NULL' THEN 1
+	ELSE 0 END AS 'ICD_NULL',
+max(total_approved_days) as max_total_app_days,
+max(rtw_date_full) as max_rtw_date,
+max(rtw_date_restricted) as max_rtw_date_restr,
+case
+	when Referred_To_ComPsych_MCF_081 > 0 THEN '1'
+	Else '0' end AS COMPSYCH_Ref
+FROM [dbo].[Sedgwick_Juris] as J
+where Coverage_Code IN ('SD', 'BL')
+   and icd_code <> 'NULL'
+    and Claim_Sub_Status <> 'Denied'
+	and benefit_plan not in ('ADAAC','STDNB')
+	and benefit_status <> 'NULL'
+	and Benefit_Type not in ('NULL', 'AD-Accident Disability')
+	and coverage_code <> 'AC'
+    and Date_Disability_Benefits_Begin <> 'NULL'
+    and Date_Disability_Benefits_Begin > '2017-12-31'
+    and Date_Disability_Benefits_Begin < '2019-12-31'
+   and ee_id_from_master NOT IN ('202000000000000','30193583887-0001',  '30193595858-0001', '30193585756-0001', '30193661310-0001', '30193357331-0001') 
+    and Last_Updated_Date = (Select Max((Last_Updated_Date ))
+    from [dbo].[Sedgwick_Juris] WHERE j.file_number = file_number) 
+	group by ee_id_from_master, file_NUMBER, Coverage_Code, Benefit_Plan_Description, Date_Disability_Benefits_Begin, Date_Disability_Benefits_End, ICD_Code_Group,BENEFIT_PLAN, Referred_To_ComPsych_MCF_081) AS A
+	GROUP BY EE_ID_FROM_MASTER,DURATION,max_claim_total_paid, max_date_hosp,max_date_lw,ICD_BACK_SPINE,ICD_BLOOD_DISORDER,ICD_BREAST_DISEASE,ICD_CIRCULATORY,ICD_CIRCUM_CAUSE,ICD_CONGENITAL,
+ICD_EAR_DISORDERS,ICD_ENDOCRINE,ICD_EXTERNAL_CAUSE,ICD_EYE_DISEASE,ICD_FRACTURES_SPRAINS,ICD_GI,ICD_INFECTIOUS_DISEASE,ICD_MENTAL_SUBSTANCE,ICD_MSK,ICD_NEURO,ICD_ORAL_DISEASE,ICD_PELVIC_DISEASE,
+ICD_PREGNANCY,PARENTAL_PRIM_vs_NONPRIM,ICD_RENAL_DISEASE,ICD_RESPIRATORY_DISEASE,ICD_SKIN_DISEASE,ICD_SYMPTOMS,ICD_TOXIC_EXPOSURE,ICD_TRAUMA,ICD_TUMOR,ICD_NULL,max_total_app_days,max_rtw_date,
+max_rtw_date_restr,COMPSYCH_Ref,BL_COV_CODE,SD_COV_CODE,STD_CLASS_1,STD_CLASS_2) as SEDG
+on flex.EE_PERNR = SEDG.EE_ID_from_Master
+WHERE FIDELITY_EE.INSERT_DATE = '2020-01-12'
+ORDER BY FIDELITY_EE.DOH DESC;
