@@ -268,7 +268,7 @@ where Coverage_Code IN ('SD', 'BL')
    and icd_code <> 'NULL'
     and Claim_Sub_Status <> 'Denied'
 	and benefit_plan not in ('ADAAC','STDNB')
-	and benefit_status <> 'NULL'
+	and benefit_status not in ('NULL', 'OD-Denied')
 	and Benefit_Type not in ('NULL', 'AD-Accident Disability')
 	and coverage_code <> 'AC'
     and Date_Disability_Benefits_Begin <> 'NULL'
