@@ -1,4 +1,4 @@
-#### 87+ RECORDS (left)joining fidelity + sedgewick STD data onto Flex EE##
+#### 87540 RECORDS (left)joining fidelity + sedgewick STD data onto Flex EE##
 
 
 
@@ -24,7 +24,7 @@ FIDELITY_EE.FIELD_401k_Balance_Rollover,
 FIDELITY_EE.FIELD_401k_Balance_EE,
 FIDELITY_EE.FIELD_401k_Balance_ER,
 FIDELITY_EE.Loan_Eligible,
-FIDELITY_EE.Current_Loan_Rate as 'Current_Loan_Rate',
+FIDELITY_EE.Current_Loan_Rate/100 as 'Current_Loan_Rate',
 FIDELITY_EE.Loan_Available,
 cast(FIDELITY_EE.Loan1_Origination_Date as Date) as 'Loan1_Orig_Date',
 FIDELITY_EE.Loan1_Original_Loan_Amount,
@@ -50,59 +50,177 @@ FIDELITY_EE.Hardship_Eligible,
 FIDELITY_EE.Hardship_Available,
 FIDELITY_EE.Number_of_Hardships_Taken_12mos,
 FIDELITY_EE.Number_of_Hardships_Taken_Total,
-Cast (FIDELITY_EE.Hardship_Date as Date) as 'Hardship Date',
+Cast (FIDELITY_EE.Hardship_Date as Date) as 'Hardship_Date',
 FIDELITY_EE.Hardship_Amount,
 FIDELITY_EE.Hardship_Reason,
 FIDELITY_EE.Beneficiary_Designation,
 FIDELITY_EE.Exercisable_SO_QTY,
-FIDELITY_EE.Investment1,
 FIDELITY_EE.Pct_Investment1/100 as 'Pct_Invst_1',
-FIDELITY_EE.Investment2,
 FIDELITY_EE.Pct_Investment2/100 as 'Pct_Invst_2',
-FIDELITY_EE.Investment3,
 FIDELITY_EE.Pct_Investment3/100 as 'Pct_Invst_3',
-FIDELITY_EE.Investment4,
 FIDELITY_EE.Pct_Investment4/100 as 'Pct_Invst_4',
-FIDELITY_EE.Investment5,
 FIDELITY_EE.Pct_Investment5/100 as 'Pct_Invst_5',
-FIDELITY_EE.Investment6,
 FIDELITY_EE.Pct_Investment6/100 as 'Pct_Invst_6',
-FIDELITY_EE.Investment7,
 FIDELITY_EE.Pct_Investment7/100 as 'Pct_Invst_7',
-FIDELITY_EE.Investment8,
 FIDELITY_EE.Pct_Investment8/100 as 'Pct_Invst_8',
-FIDELITY_EE.Investment9,
 FIDELITY_EE.Pct_Investment9/100 as 'Pct_Invst_9',
-FIDELITY_EE.Investment10,
 FIDELITY_EE.Pct_Investment10/100 as 'Pct_Invst_10',
-FIDELITY_EE.Investment11,
 FIDELITY_EE.Pct_Investment11/100 as 'Pct_Invst_11',
-FIDELITY_EE.Investment12,
 FIDELITY_EE.Pct_Investment12/100 as 'Pct_Invst_12',
-FIDELITY_EE.Investment13,
 FIDELITY_EE.Pct_Investment13/100 as 'Pct_Invst_13',
-FIDELITY_EE.Investment14,
 FIDELITY_EE.Pct_Investment14/100 as 'Pct_Invst_14',
-FIDELITY_EE.Investment15,
 FIDELITY_EE.Pct_Investment15/100 as 'Pct_Invst_15',
-FIDELITY_EE.Investment16,
 FIDELITY_EE.Pct_Investment16/100 as 'Pct_Invst_16',
-FIDELITY_EE.Investment17,
 FIDELITY_EE.Pct_Investment17/100 as 'Pct_Invst_17',
-FIDELITY_EE.Investment18,
 FIDELITY_EE.Pct_Investment18/100 as 'Pct_Invst_18',
-FIDELITY_EE.Investment19,
 FIDELITY_EE.Pct_Investment19/100 as 'Pct_Invst_19',
-FIDELITY_EE.Investment20,
 FIDELITY_EE.Pct_Investment20/100 as 'Pct_Invst_20',
-FIDELITY_EE.Investment21,
 FIDELITY_EE.Pct_Investment21/100 as 'Pct_Invst_21',
-FIDELITY_EE.Investment22,
 FIDELITY_EE.Pct_Investment22/100 as 'Pct_Invst_22',
 cast(FIDELITY_EE.Insert_Date as Date) as 'Insert_Date_Fidelity',
 FIDELITY_EE.record_id,
-flex.*,
-sedg.*
+Flex.EE_PERNR,
+Flex.PREV_PERNER,
+Flex.EE_AGE,
+Flex.EE_STATUS,
+Flex.EE_SERVICE_TENURE_MONTHS,
+Flex.EE_SERVICE_TENURE_YEARS,
+Flex.DIV_PIT,
+Flex.DIV_DESC_PIT,
+Flex.DIV_TODAY,
+Flex.DIV_DESC_TODAY,
+Flex.BONUS_PLAN_TYPE,
+Flex.DIV_L1_PIT,
+Flex.DIV_L1_DESC_PIT,
+Flex.DIV1_TODAY,
+Flex.DIV1_DESC_TODAY,
+Flex.ORG_KEY_PIT,
+Flex.ORG_KEY_DESC_PIT,
+Flex.ORG_KEY_TODAY,
+Flex.ORG_KEY_DESC_TODAY,
+Flex.ORG_UNIT,
+Flex.JOB_FAMILY,
+Flex.JOB_NAME,
+Flex.JOB_FUNCTION,
+Flex.JOB_LEVEL,
+Flex.REPORTING_LOC_CITY,
+Flex.REPORTING_LOC_STATE,
+Flex.REPORTING_LOC_ZIP,
+Flex.WORK_LOC_CITY,
+Flex.WORK_LOC_STATE,
+CAST(Flex.LAST_WORKED_DATE as date)LAST_WORKED_DATE,
+Flex.PEOPLE_MGR_FLAG,
+Flex.WORK_HRS_P_WEEK,
+CAST(Flex.ORIG_HIRE_DATE as date)ORIG_HIRE_DATE,
+CAST(Flex.POS_START_DATE as date)POS_START_DATE,
+Flex.PREV_POS_DESCRIPTION,
+CAST(Flex.REHIRE_DATE as date)REHIRE_DATE,
+Flex.ANNUAL_SALARY,
+Flex.ANNUAL_ABBR,
+CAST(Flex.ESPP_ELIG_DATE as date)ESPP_ELIG_DATE,
+CASE	
+	WHEN SEDG.TOT_SD_COV_CODE > 0 then 1
+	else 0 end as 'STD_Indicator',
+CASE	
+	WHEN SEDG.TOT_BL_COV_CODE > 0 then 1
+	else 0 end as 'BL_Indicator',
+CASE	
+	WHEN SEDG.TOT_STD_CLASS_1 > 0 then 1
+	else 0 end as 'STD_CLASS_1_Indicator',
+CASE	
+	WHEN SEDG.TOT_STD_CLASS_2 > 0 then 1
+	else 0 end as 'STD_CLASS_2_Indicator',
+CASE	
+	WHEN SEDG.ICD_BACK_SPINE > 0 then 1
+	else 0 end as 'ICD_BACK_SPINE'	,
+CASE	
+	WHEN SEDG.ICD_BLOOD_DISORDER > 0 then 1
+	else 0 end as 'ICD_BLOOD_DISORDER',
+CASE	
+	WHEN SEDG.ICD_BREAST_DISEASE > 0 then 1
+	else 0 end as 'ICD_BREAST_DISEASE',
+CASE	
+	WHEN SEDG.ICD_CIRCULATORY > 0 then 1
+	else 0 end as 'ICD_CIRCULATORY',
+CASE	
+	WHEN SEDG.ICD_CIRCUM_CAUSE > 0 then 1
+	else 0 end as 'ICD_CIRCUM_CAUSE',
+CASE	
+	WHEN SEDG.ICD_CONGENITAL > 0 then 1
+	else 0 end as 'ICD_CONGENITAL',
+CASE	
+	WHEN SEDG.ICD_EAR_DISORDERS > 0 then 1
+	else 0 end as 'ICD_EAR_DISORDERS',
+CASE	
+	WHEN SEDG.ICD_ENDOCRINE > 0 then 1
+	else 0 end as 'ICD_ENDOCRINE',
+CASE	
+	WHEN SEDG.ICD_EXTERNAL_CAUSE > 0 then 1
+	else 0 end as 'ICD_EXTERNAL_CAUSE',
+CASE	
+	WHEN SEDG.ICD_EYE_DISEASE > 0 then 1
+	else 0 end as 'ICD_EYE_DISEASE',
+CASE	
+	WHEN SEDG.ICD_FRACTURES_SPRAINS > 0 then 1
+	else 0 end as 'ICD_FRACTURES_SPRAINS',
+CASE	
+	WHEN SEDG.ICD_GI > 0 then 1
+	else 0 end as 'ICD_GI',
+CASE	
+	WHEN SEDG.ICD_INFECTIOUS_DISEASE > 0 then 1
+	else 0 end as 'ICD_INFECTIOUS_DISEASE',
+CASE	
+	WHEN SEDG.ICD_MENTAL_SUBSTANCE > 0 then 1
+	else 0 end as 'ICD_MENTAL_SUBSTANCE',
+CASE	
+	WHEN SEDG.ICD_MSK > 0 then 1
+	else 0 end as 'ICD_MSK',
+CASE	
+	WHEN SEDG.ICD_NEURO > 0 then 1
+	else 0 end as 'ICD_NEURO',
+CASE	
+	WHEN SEDG.ICD_ORAL_DISEASE > 0 then 1
+	else 0 end as 'ICD_ORAL_DISEASE',
+CASE	
+	WHEN SEDG.ICD_PELVIC_DISEASE > 0 then 1
+	else 0 end as 'ICD_PELVIC_DISEASE',
+CASE	
+	WHEN SEDG.ICD_PREGNANCY > 0 then 1
+	else 0 end as 'ICD_PREGNANCY',
+CASE	
+	WHEN SEDG.PARENTAL_PRIM_vs_NONPRIM > 0 then 1
+	else 0 end as 'PARENTAL_PRIM_vs_NONPRIM',
+CASE	
+	WHEN SEDG.ICD_RENAL_DISEASE > 0 then 1
+	else 0 end as 'ICD_RENAL_DISEASE',
+CASE	
+	WHEN SEDG.ICD_RESPIRATORY_DISEASE > 0 then 1
+	else 0 end as 'ICD_RESPIRATORY_DISEASE',
+CASE	
+	WHEN SEDG.ICD_SKIN_DISEASE > 0 then 1
+	else 0 end as 'ICD_SKIN_DISEASE',
+CASE	
+	WHEN SEDG.ICD_SYMPTOMS > 0 then 1
+	else 0 end as 'ICD_SYMPTOMS',
+CASE	
+	WHEN SEDG.ICD_TOXIC_EXPOSURE > 0 then 1
+	else 0 end as 'ICD_TOXIC_EXPOSURE',
+CASE	
+	WHEN SEDG.ICD_TRAUMA > 0 then 1
+	else 0 end as 'ICD_TRAUMA',
+CASE	
+	WHEN SEDG.ICD_TUMOR > 0 then 1
+	else 0 end as 'ICD_TUMOR',
+CASE	
+	WHEN SEDG.ICD_NULL > 0 then 1
+	else 0 end as 'ICD_NULL',
+CASE	
+	WHEN SEDG.ComPsych_Ref > 0 then 1
+	else 0 end as 'ComPsych_Ref',
+SEDG.Max_Claim_Tot_Paid,
+SEDG.Max_Tot_App_Days,
+SEDG.MAX_RTW_DATE,
+SEDG.Max_RTW_Date_Restricted
 
 FROM dbo.Fidelity_EE AS FIDELITY_EE
 
@@ -111,7 +229,7 @@ on FIDELITY_EE.PERNER = flex.EE_PERNR
 
 left join(
 select
-DISTINCT EE_ID_from_Master,
+distinct ee_id_from_master,
 sum(STD_CLASS_1) OVER (PARTITION BY EE_ID_FROM_MASTER) AS TOT_STD_CLASS_1,
 sum(STD_CLASS_2) OVER (PARTITION BY EE_ID_FROM_MASTER) AS TOT_STD_CLASS_2,
 sum(SD_COV_CODE) OVER (PARTITION BY EE_ID_FROM_MASTER) AS TOT_SD_COV_CODE,
@@ -147,8 +265,8 @@ SUM(ICD_TRAUMA) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_TRAUMA,
 SUM(ICD_TUMOR) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_TUMOR,
 SUM(ICD_NULL) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_NULL,
 max(max_total_app_days) over (partition by ee_id_from_master) as Max_Tot_App_Days,
-max(max_rtw_date) over (partition by ee_id_from_master) as Max_RTW_Date,
-max(max_rtw_date_restr) over (partition by ee_id_from_master) as Max_RTW_Date_Restricted,
+cast((max(max_rtw_date) over (partition by ee_id_from_master)) as date) as Max_RTW_Date,
+cast((max(max_rtw_date_restr) over (partition by ee_id_from_master) ) as date) as Max_RTW_Date_Restricted,
 case 
 	when COMPSYCH_Ref > '1' then '1'
 	else '0' end as ComPsych_Ref
@@ -159,8 +277,8 @@ EE_ID_from_Master,
 date_disability_benefits_begin,
 (DATEDIFF(day, date_disability_benefits_begin, date_disability_benefits_end)) as Duration,
 max(claim_total_paid) as max_claim_total_paid,
-max(Date_Hospitalized) as max_date_hosp,
-max(date_last_worked) as max_date_lw,
+cast((max(Date_Hospitalized)) as date) as max_date_hosp,
+cast((max(date_last_worked)) as date) as max_date_lw,
 CASE
 	WHEN Benefit_Plan_Description like '%Class 1' then 1
 	ELSE 0 END AS 'STD_CLASS_1',
@@ -258,8 +376,8 @@ CASE
 	WHEN ICD_CODE_GROUP = 'NULL' THEN 1
 	ELSE 0 END AS 'ICD_NULL',
 max(total_approved_days) as max_total_app_days,
-max(rtw_date_full) as max_rtw_date,
-max(rtw_date_restricted) as max_rtw_date_restr,
+cast((max(rtw_date_full)) as date) as max_rtw_date,
+cast((max(rtw_date_restricted)) as date) as max_rtw_date_restr,
 case
 	when Referred_To_ComPsych_MCF_081 > 0 THEN '1'
 	Else '0' end AS COMPSYCH_Ref
@@ -268,13 +386,12 @@ where Coverage_Code IN ('SD', 'BL')
    and icd_code <> 'NULL'
     and Claim_Sub_Status <> 'Denied'
 	and benefit_plan not in ('ADAAC','STDNB')
-	and benefit_status not in ('NULL', 'OD-Denied')
+	and benefit_status <> 'NULL'
 	and Benefit_Type not in ('NULL', 'AD-Accident Disability')
 	and coverage_code <> 'AC'
     and Date_Disability_Benefits_Begin <> 'NULL'
     and Date_Disability_Benefits_Begin > '2017-12-31'
-    and Date_Disability_Benefits_Begin < '2019-12-31'
-   and ee_id_from_master NOT IN ('202000000000000','30193583887-0001',  '30193595858-0001', '30193585756-0001', '30193661310-0001', '30193357331-0001') 
+    and Date_Disability_Benefits_Begin < '2019-12-31' 
     and Last_Updated_Date = (Select Max((Last_Updated_Date ))
     from [dbo].[Sedgwick_Juris] WHERE j.file_number = file_number) 
 	group by ee_id_from_master, file_NUMBER, Coverage_Code, Benefit_Plan_Description, Date_Disability_Benefits_Begin, Date_Disability_Benefits_End, ICD_Code_Group,BENEFIT_PLAN, Referred_To_ComPsych_MCF_081) AS A
@@ -284,4 +401,5 @@ ICD_PREGNANCY,PARENTAL_PRIM_vs_NONPRIM,ICD_RENAL_DISEASE,ICD_RESPIRATORY_DISEASE
 max_rtw_date_restr,COMPSYCH_Ref,BL_COV_CODE,SD_COV_CODE,STD_CLASS_1,STD_CLASS_2) as SEDG
 on flex.EE_PERNR = SEDG.EE_ID_from_Master
 WHERE FIDELITY_EE.INSERT_DATE = '2020-01-12'
-ORDER BY FIDELITY_EE.DOH DESC;
+and FIDELITY_EE.Plan_Code like '%Comcast'
+and FIDELITY_EE.PERNER <> '10220540';
