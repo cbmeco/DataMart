@@ -1,0 +1,20 @@
+##01/23/2020
+##Data Pull from Fidelity report to get the ESPP rate and Current Outstanding Loans for NBCU employees & Parks
+
+select 
+distinct(a.perner),
+cast(a.DOB as date) as 'DOB',
+b.Division,
+a.Plan_Code,
+a.Current_401k_Balance,
+a.Current_ESPP_Rate/100 as 'ESPP_Rate',
+a.Current_Loan_Rate/100 as 'Loan_Rate',
+a.Current_QTD_ESPP_Balance,
+a.Loan1_Current_Outstanding_Loan_Balance,
+a.Loan2_Current_Outstanding_Loan_Balance
+from dbo.Fidelity_EE a
+left join dbo.WTW_Employee_Eligibility b
+on a.PERNER = b.Emp_ID
+where b.DIVISION in ('NBCU', 'USH')
+and a.Insert_Date = '2020-01-12'
+and a.Status like '%ACT%';
