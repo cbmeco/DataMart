@@ -1,9 +1,9 @@
-#### 89180 RECORDS (left)joining fidelity + sedgewick STD data onto Flex EE##
-##Fidelity/Flex EE report dates --> 02.04.2019##
+#### 89361 RECORDS (left)joining fidelity + sedgewick STD data onto Flex EE##
+##Fidelity - 02.04.2019 and Flex 01.31.2019
 
 
 SELECT 
-Flex.EE_PERNR,
+distinct(Flex.EE_PERNR),
 FIDELITY_EE.PERNER,
 FIDELITY_EE.Plan_Code,
 FIDELITY_EE.Status,
@@ -225,14 +225,19 @@ SEDG.Max_Tot_App_Days,
 SEDG.MAX_RTW_DATE,
 SEDG.Max_RTW_Date_Restricted
 
-FROM dbo.Fidelity_EE AS FIDELITY_EE
+FROM [dbo].[Flexible Employee Report] as flex
+LEFT join  (
+select *
+from Fidelity_EE
+where FIDELITY_EE.INSERT_DATE = '2019-02-04'
+and FIDELITY_EE.Plan_Code like '%Comcast'
+and FIDELITY_EE.PERNER <> '10220540') as Fidelity_EE
 
-RIGHT join [dbo].[Flexible Employee Report] as flex
-on FIDELITY_EE.PERNER = Flex.EE_PERNR
+on Flex.EE_PERNR = FIDELITY_EE.PERNER
 
 left join(
 select
-distinct ee_id_from_master,
+ee_id_from_master,
 sum(STD_CLASS_1) OVER (PARTITION BY EE_ID_FROM_MASTER) AS TOT_STD_CLASS_1,
 sum(STD_CLASS_2) OVER (PARTITION BY EE_ID_FROM_MASTER) AS TOT_STD_CLASS_2,
 sum(SD_COV_CODE) OVER (PARTITION BY EE_ID_FROM_MASTER) AS TOT_SD_COV_CODE,
@@ -400,7 +405,7 @@ where Coverage_Code IN ('SD', 'BL')
 ICD_EAR_DISORDERS,ICD_ENDOCRINE,ICD_EXTERNAL_CAUSE,ICD_EYE_DISEASE,ICD_FRACTURES_SPRAINS,ICD_GI,ICD_INFECTIOUS_DISEASE,ICD_MENTAL_SUBSTANCE,ICD_MSK,ICD_NEURO,ICD_ORAL_DISEASE,ICD_PELVIC_DISEASE,
 ICD_PREGNANCY,PARENTAL_PRIM_vs_NONPRIM,ICD_RENAL_DISEASE,ICD_RESPIRATORY_DISEASE,ICD_SKIN_DISEASE,ICD_SYMPTOMS,ICD_TOXIC_EXPOSURE,ICD_TRAUMA,ICD_TUMOR,ICD_NULL,max_total_app_days,max_rtw_date,
 max_rtw_date_restr,COMPSYCH_Ref,BL_COV_CODE,SD_COV_CODE,STD_CLASS_1,STD_CLASS_2) as SEDG
-on Flex.EE_PERNR= SEDG.EE_ID_from_Master
-WHERE FIDELITY_EE.INSERT_DATE = '2019-02-04'
+on SEDG.EE_ID_from_Master = Flex.EE_PERNR
+and FIDELITY_EE.INSERT_DATE = '2019-02-04'
 and FIDELITY_EE.Plan_Code like '%Comcast'
 and FIDELITY_EE.PERNER <> '10220540';
