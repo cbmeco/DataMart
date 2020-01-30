@@ -1,5 +1,5 @@
-#### 87540 RECORDS (left)joining fidelity + sedgewick STD data onto Flex EE##
-##Fidelity/Flex EE report dates --> 01.31.2019##
+#### 89887 RECORDS (left)joining fidelity + sedgewick STD data onto Flex EE##
+##Fidelity/Flex EE report dates --> 02.04.2019##
 
 
 SELECT 
@@ -227,8 +227,8 @@ SEDG.Max_RTW_Date_Restricted
 
 FROM dbo.Fidelity_EE AS FIDELITY_EE
 
-RIGHT join dbo.Flexible_Employee_Report as flex
-on FIDELITY_EE.PERNER = Flex.[Employee PERNR]
+RIGHT join [dbo].[Flexible Employee Report] as flex
+on FIDELITY_EE.PERNER = Flex.EE_PERNR
 
 left join(
 select
@@ -271,7 +271,7 @@ max(max_total_app_days) over (partition by ee_id_from_master) as Max_Tot_App_Day
 cast((max(max_rtw_date) over (partition by ee_id_from_master)) as date) as Max_RTW_Date,
 cast((max(max_rtw_date_restr) over (partition by ee_id_from_master) ) as date) as Max_RTW_Date_Restricted,
 case 
-	when COMPSYCH_Ref > '1' then '1'
+	when COMPSYCH_Ref = '1' then '1'
 	else '0' end as ComPsych_Ref
 FROM (
 SELECT 
@@ -382,8 +382,8 @@ max(total_approved_days) as max_total_app_days,
 cast((max(rtw_date_full)) as date) as max_rtw_date,
 cast((max(rtw_date_restricted)) as date) as max_rtw_date_restr,
 case
-	when Referred_To_ComPsych_MCF_081 > 0 THEN '1'
-	Else '0' end AS COMPSYCH_Ref
+	when Referred_To_ComPsych_MCF_081 = 1 THEN 1
+	Else 0 end AS COMPSYCH_Ref
 FROM [dbo].[Sedgwick_Juris] as J
 where Coverage_Code IN ('SD', 'BL')
    and icd_code <> 'NULL'
@@ -403,6 +403,6 @@ ICD_EAR_DISORDERS,ICD_ENDOCRINE,ICD_EXTERNAL_CAUSE,ICD_EYE_DISEASE,ICD_FRACTURES
 ICD_PREGNANCY,PARENTAL_PRIM_vs_NONPRIM,ICD_RENAL_DISEASE,ICD_RESPIRATORY_DISEASE,ICD_SKIN_DISEASE,ICD_SYMPTOMS,ICD_TOXIC_EXPOSURE,ICD_TRAUMA,ICD_TUMOR,ICD_NULL,max_total_app_days,max_rtw_date,
 max_rtw_date_restr,COMPSYCH_Ref,BL_COV_CODE,SD_COV_CODE,STD_CLASS_1,STD_CLASS_2) as SEDG
 on Flex.EE_PERNR= SEDG.EE_ID_from_Master
-WHERE FIDELITY_EE.INSERT_DATE = '2019-01-31'
+WHERE FIDELITY_EE.INSERT_DATE = '2019-02-04'
 and FIDELITY_EE.Plan_Code like '%Comcast'
 and FIDELITY_EE.PERNER <> '10220540';
