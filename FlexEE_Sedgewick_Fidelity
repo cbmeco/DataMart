@@ -1,4 +1,4 @@
-#### 89887 RECORDS (left)joining fidelity + sedgewick STD data onto Flex EE##
+#### 89180 RECORDS (left)joining fidelity + sedgewick STD data onto Flex EE##
 ##Fidelity/Flex EE report dates --> 02.04.2019##
 
 
@@ -270,9 +270,7 @@ SUM(ICD_NULL) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ICD_NULL,
 max(max_total_app_days) over (partition by ee_id_from_master) as Max_Tot_App_Days,
 cast((max(max_rtw_date) over (partition by ee_id_from_master)) as date) as Max_RTW_Date,
 cast((max(max_rtw_date_restr) over (partition by ee_id_from_master) ) as date) as Max_RTW_Date_Restricted,
-case 
-	when COMPSYCH_Ref = '1' then '1'
-	else '0' end as ComPsych_Ref
+SUM(COMPSYCH_Ref) OVER (PARTITION BY EE_ID_FROM_MASTER) AS ComPsych_Ref
 FROM (
 SELECT 
 EE_ID_from_Master,
