@@ -302,10 +302,10 @@ isnull(cast(max(claim_total_paid) as float),0) as max_claim_total_paid,
 cast((max(Date_Hospitalized)) as date) as max_date_hosp,
 cast((max(date_last_worked)) as date) as max_date_lw,
 CASE
-	WHEN date_disability_benefits_begin like '%2018' then 1
+	WHEN date_disability_benefits_begin like '%2018%' then 1
 	else 0 end as 'Dis_Ben_Begin_2018',
 CASE
-	WHEN date_disability_benefits_begin like '%2019' then 1
+	WHEN date_disability_benefits_begin like '%2019%' then 1
 	else 0 end as 'Dis_Ben_Begin_2019',
 CASE
 	WHEN Benefit_Plan_Description like '%Class 1' then 1
