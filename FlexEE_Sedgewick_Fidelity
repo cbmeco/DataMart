@@ -573,7 +573,7 @@ where Coverage_Code IN ('SD', 'BL')
 	and Last_Updated_Date = (Select Max((Last_Updated_Date ))
     from [dbo].[Sedgwick_Juris] WHERE j.file_number = file_number) 
 	group by ee_id_from_master, file_NUMBER, Coverage_Code,Benefit_Plan_Description,Date_Disability_Benefits_Begin, Date_Disability_Benefits_End, ICD_Code_Group,BENEFIT_PLAN, Referred_To_ComPsych_MCF_081 ) AS b
-	left join (
+	full OUTER join (
 	SELECT 
 EE_ID_from_Master,
 (File_Number),
@@ -711,7 +711,7 @@ where Coverage_Code IN ('SD', 'BL')
 
 	on a.EE_ID_from_Master = b.EE_ID_from_Master
 )as SEDG
-on SEDG.EE_PERNR = Flex.EE_PERNR
+on Flex.EE_PERNR = SEDG.EE_PERNR
 and FIDELITY_EE.INSERT_DATE = '2019-02-04'
 and FIDELITY_EE.Plan_Code like '%Comcast'
 and FIDELITY_EE.PERNER <> '10220540';
