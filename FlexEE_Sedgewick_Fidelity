@@ -1,5 +1,5 @@
 SELECT 
-distinct(Flex.EE_PERNR) as Flex_Pernr,
+distinct(Flex.EE_PERNR),
 FIDELITY_EE.PERNER as Fidelity_Pernr,
 FIDELITY_EE.Plan_Code,
 FIDELITY_EE.Status,
