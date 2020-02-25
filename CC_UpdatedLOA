@@ -224,12 +224,13 @@ SEDG.Max_Claim_Tot_Paid,
 SEDG.Max_Tot_App_Days,
 SEDG.MAX_RTW_DATE,
 SEDG.Max_RTW_Date_Restricted,
-SEDG.TOT_DIS_BEGIN_PRE_PERIOD,
+SEDG.std_study_count,
 /*PRIOR STD FIELDS*/
 
 p_SEDG.TOT_P_DURATION,
 
 p_SEDG.TOT_P_DAYS_LOST,
+p_SEDG.pre_std_study_count,
 CASE	
 	WHEN p_SEDG.TOT_P_SD_COV_CODE > 0 then 1
 	else 0 end as 'P_STD_Indicator',
@@ -351,7 +352,7 @@ on Flex.EE_PERNR = FIDELITY_EE.PERNER
 left join(
 select
 distinct(a.EE_ID_from_Master) as EE_PERNR,
-sum(a.Dis_Ben_Begin_Study_Period) over (partition by a.ee_id_from_master) as TOT_DIS_BEGIN_PRE_PERIOD,
+std_study_count,
 sum(STD_CLASS_1) OVER (PARTITION BY a.EE_ID_FROM_MASTER) AS TOT_STD_CLASS_1,
 sum(STD_CLASS_2) OVER (PARTITION BY a.EE_ID_FROM_MASTER) AS TOT_STD_CLASS_2,
 sum(SD_COV_CODE) OVER (PARTITION BY a.EE_ID_FROM_MASTER) AS TOT_SD_COV_CODE,
@@ -397,7 +398,7 @@ SUM(COMPSYCH_Ref) OVER (PARTITION BY a.EE_ID_FROM_MASTER) AS ComPsych_Ref/*,*/
 from 
 (SELECT 
 EE_ID_from_Master,
-(File_Number),
+count(file_number) over (partition by ee_id_from_master) as std_study_count,
 (DATEDIFF(day, date_disability_benefits_begin, date_disability_benefits_end) + 1)
   -(DATEDIFF(WK, date_disability_benefits_begin, date_disability_benefits_end) * 2)
   -(CASE WHEN DATENAME(DW, date_disability_benefits_begin) = 'Sunday' THEN 1 ELSE 0 END)
@@ -406,9 +407,6 @@ EE_ID_from_Master,
 isnull(cast(max(claim_total_paid) as float),0) as max_claim_total_paid,
 cast((max(Date_Hospitalized)) as date) as max_date_hosp,
 cast((max(date_last_worked)) as date) as max_date_lw,
-CASE
-	WHEN date_disability_benefits_begin > '2019-01-31' then 1
-	else 0 end as 'Dis_Ben_Begin_Study_Period',
 CASE
 	WHEN Benefit_Plan_Description like '%Class 1' then 1
 	ELSE 0 END AS 'STD_CLASS_1',
@@ -534,6 +532,7 @@ on Flex.EE_PERNR = SEDG.EE_PERNR
 left join(
 select 
 distinct(b.EE_ID_from_Master) as EE_PERNR,
+pre_std_study_count,
 sum(P_STD_CLASS_1) OVER (PARTITION BY b.EE_ID_FROM_MASTER) AS TOT_P_STD_CLASS_1,
 sum(P_STD_CLASS_2) OVER (PARTITION BY b.EE_ID_FROM_MASTER) AS TOT_P_STD_CLASS_2,
 sum(P_SD_COV_CODE) OVER (PARTITION BY b.EE_ID_FROM_MASTER) AS TOT_P_SD_COV_CODE,
@@ -578,7 +577,7 @@ SUM(P_COMPSYCH_Ref) OVER (PARTITION BY b.EE_ID_FROM_MASTER) AS P_ComPsych_Ref
 
 from (SELECT 
 EE_ID_from_Master,
-(File_Number),
+count(file_number) over (partition by ee_id_from_master) as pre_std_study_count,
 (DATEDIFF(day, date_disability_benefits_begin, date_disability_benefits_end) + 1)
   -(DATEDIFF(WK, date_disability_benefits_begin, date_disability_benefits_end) * 2)
   -(CASE WHEN DATENAME(DW, date_disability_benefits_begin) = 'Sunday' THEN 1 ELSE 0 END)
@@ -587,9 +586,6 @@ EE_ID_from_Master,
 isnull(cast(max(claim_total_paid) as float),0) as P_max_claim_total_paid,
 cast((max(Date_Hospitalized)) as date) as P_max_date_hosp,
 cast((max(date_last_worked)) as date) as P_max_date_lw,
-CASE
-	WHEN date_disability_benefits_begin < '2019-01-31' then 1
-	else 0 end as 'Dis_Ben_Begin_Pre_Period',
 CASE
 	WHEN Benefit_Plan_Description like '%Class 1' then 1
 	ELSE 0 END AS 'P_STD_CLASS_1',
