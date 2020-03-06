@@ -138,7 +138,31 @@ Join_dat_3<- join(Join_dat_2, Seq_dat_4_a, type = 'left', by = 'PERNR')
 Seq_dat_5_a <- Seq_dat_5[,c(1:4, 6:25, 27:31, 33:35,37:44, 52, 54:70)]
 Join_dat_all<- join(Join_dat_3, Seq_dat_5_a, type = 'left', by = 'PERNR')
 
-View(Join_dat_all)
+//*add the durationt between promotions*\\
+df<- Join_dat_all
+
+df$first_promo <- difftime(as.Date(df$Action_Start_Date,format = "%m/%d/%Y"),as.Date(df$Original_Hire_Date,format = "%m/%d/%Y"), units = "days")
+df$first_promo_months <- round(((df$first_promo/365)*12), digits = 5)
+df$first_promo_years <- round((df$first_promo/365), digits = 5)
+View(df)
+
+
+df$second_promo <- difftime(as.Date(df$Action_Start_Date_2,format = "%m/%d/%Y"),as.Date(df$Prev_Position_Start_2,format = "%m/%d/%Y"), units = "days")
+df$second_promo_months <- round(((df$second_promo/365)*12), digits = 5)
+df$second_promo_years <- round((df$second_promo/365), digits = 5)
+
+df$third_promo <- difftime(as.Date(df$Action_Start_Date_3,format = "%m/%d/%Y"),as.Date(df$Prev_Position_Start_3,format = "%m/%d/%Y"), units = "days")
+df$third_promo_months <- round(((df$third_promo/365)*12), digits = 5)
+df$third_promo_years <- round((df$third_promo/365), digits = 5)
+
+df$fourth_promo <- difftime(as.Date(df$Action_Start_Date_4,format = "%m/%d/%Y"),as.Date(df$Prev_Position_Start_4,format = "%m/%d/%Y"), units = "days")
+df$fourth_promo_months <- round(((df$fourth_promo/365)*12), digits = 5)
+df$fourth_promo_years <- round((df$fourth_promo/365), digits = 5)
+
+df$fifth_promo <- difftime(as.Date(df$Action_Start_Date_5,format = "%m/%d/%Y"),as.Date(df$Prev_Position_Start_5,format = "%m/%d/%Y"), units = "days")
+df$fifth_promo_months <- round(((df$fifth_promo/365)*12), digits = 5)
+df$fifth_promo_years <- round((df$fifth_promo/365), digits = 5)
+
 write.csv(Join_dat_all, "ILP_ok_we_got_this.csv",na = "",
           row.names = FALSE,
           col.names = TRUE,
