@@ -7,8 +7,7 @@ library("sqldf")
 library("plyr")
 dat2<- read.csv("ILP_Redo_3.6.csv", header = TRUE)
 
-//**coding job levels to indicate eventually what was a job level promotion**\\
-
+dat2<- dat2[order(dat2$PERNR,dat2$Action_Start_Date),]
 dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Support 1')] <- 1
 dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Support 2')] <- 2
 dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Support 3')] <- 3
@@ -71,12 +70,10 @@ dat2$Job_Level_Coded[dat2$Job_Level_ID==('Executive 5')] <- 29
 
 dat2$Job_Level_Diff <- dat2$Job_Level_Coded - dat2$Prev_Job_Level_Coded
 
+dat3<- dat2[which (dat2$Prev_Annual_Salary > 0),]
 
-//*removing records where the Previous Annual Salary was '0' since they most likely are new hires*\\
-dat3<- dat2[which (dat$Prev_Annual_Salary > 0),]
 //*reduces from 142K records to 69.4K records*\\
 
-//**creating indicator fields for Job Level(greater than 0), AS, ABBR, AS+ABBR promos (>=.03)**\\
 dat3$Job_Level_Promo[dat3$Job_Level_Diff > 0] <- 1 
 dat3$Job_Level_Promo[dat3$Job_Level_Diff == 0] <- 0 
 
@@ -96,7 +93,8 @@ dat3$AS_ABBR_sum_diff <- (dat3$AS_ABBR_sum) - (dat3$prev_AS_ABBR_sum)
 dat3$AS_ABBR_diff_perc <- round((dat3$AS_ABBR_sum_diff)/(dat3$prev_AS_ABBR_sum), digits = 5)
 dat3$AS_ABBR_promo[dat3$AS_ABBR_diff_perc >= .03] <- 1
 dat3$AS_ABBR_promo[dat3$AS_ABBR_diff_perc < .03] <- 0
-
+dat$total_promos <- with(dat, ave(PERNR, PERNR, FUN=length))
+dat$promo_sequence <- with(dat, ave(PERNR, PERNR, FUN=seq_along))
 write.csv(dat3, "ILP_better.csv",na = "",
           row.names = FALSE,
           col.names = TRUE,
@@ -104,6 +102,7 @@ write.csv(dat3, "ILP_better.csv",na = "",
           sep = ",")
 
 //*if we remove AS_ABBR_promos and AS_promos that are not 3%+, then we have 38.9K records vs 69.4K records*\\
+
 dat4<- dat3[which (dat3$AS_ABBR_promo == 1),]
 dat5<- dat4[which (dat4$AS_Promo == 1),]
 write.csv(dat5, "ILP_better_removed_no_promos.csv",na = "",
@@ -113,34 +112,38 @@ write.csv(dat5, "ILP_better_removed_no_promos.csv",na = "",
           sep = ",")
 View(dat5)
 dat<- dat5
-//*based on PERNR, count total # of promotions + add in the sequence of each promotion*\\
-dat$total_promos <- with(dat, ave(PERNR, PERNR, FUN=length))
-dat$promo_sequence <- with(dat, ave(PERNR, PERNR, FUN=seq_along))
 
 
-//*Create the wide dataset by LEFT joins*\\
 Seq_dat_1 <- dat[which(dat$promo_sequence == '1'),]
-Seq_dat_1_a <- Seq_dat_1[,c(1:4,6:35,37:44, 51,52,54:70)]
+Seq_dat_1_a <- Seq_dat_1[,c(1:4,6:35,37:44, 51,52,54:72)]
 Seq_dat_2 <- dat[which(dat$promo_sequence == '2'),]
-Seq_dat_2_a <- Seq_dat_2[,c(1:4, 6:25, 27:31, 33:35,37:44, 52, 54:70)]
+Seq_dat_2_a <- Seq_dat_2[,c(1:4, 6:25, 27:31, 33:35,37:44, 52, 54:72)]
 Join_dat_1<- join(Seq_dat_1_a, Seq_dat_2_a, type = 'left', by = 'PERNR')
 
 Seq_dat_3<- dat[which(dat$promo_sequence == '3'),]
 Seq_dat_4<- dat[which(dat$promo_sequence == '4'),]
 Seq_dat_5<- dat[which(dat$promo_sequence == '5'),]
 
-Seq_dat_3_a <- Seq_dat_3[,c(1:4, 6:25, 27:31, 33:35,37:44, 52, 54:70)]
+Seq_dat_3_a <- Seq_dat_3[,c(1:4, 6:25, 27:31, 33:35,37:44, 52, 54:72)]
 Join_dat_2<- join(Join_dat_1, Seq_dat_3_a, type = 'left', by = 'PERNR')
 
-Seq_dat_4_a <- Seq_dat_4[,c(1:4, 6:25, 27:31, 33:35,37:44, 52, 54:70)]
+Seq_dat_4_a <- Seq_dat_4[,c(1:4, 6:25, 27:31, 33:35,37:44, 52, 54:72)]
 Join_dat_3<- join(Join_dat_2, Seq_dat_4_a, type = 'left', by = 'PERNR')
 
-Seq_dat_5_a <- Seq_dat_5[,c(1:4, 6:25, 27:31, 33:35,37:44, 52, 54:70)]
+Seq_dat_5_a <- Seq_dat_5[,c(1:4, 6:25, 27:31, 33:35,37:44, 52, 54:72)]
 Join_dat_all<- join(Join_dat_3, Seq_dat_5_a, type = 'left', by = 'PERNR')
+Join_dat_all <- Join_dat_all[order(Join_dat_all$PERNR),]
 
-//*add the durationt between promotions*\\
+View(Join_dat_all)
+write.csv(Join_dat_all, "ILP_ok_we_got_this.csv",na = "",
+          row.names = FALSE,
+          col.names = TRUE,
+          append = TRUE,
+          sep = ",")
+///*in excel deleted promos > 5 (142 records)*\\
+//**also here need to change the names of the columns to distinguish the fields associated with what promotion**\\
+
 df<- Join_dat_all
-
 df$first_promo <- difftime(as.Date(df$Action_Start_Date,format = "%m/%d/%Y"),as.Date(df$Original_Hire_Date,format = "%m/%d/%Y"), units = "days")
 df$first_promo_months <- round(((df$first_promo/365)*12), digits = 5)
 df$first_promo_years <- round((df$first_promo/365), digits = 5)
@@ -163,7 +166,7 @@ df$fifth_promo <- difftime(as.Date(df$Action_Start_Date_5,format = "%m/%d/%Y"),a
 df$fifth_promo_months <- round(((df$fifth_promo/365)*12), digits = 5)
 df$fifth_promo_years <- round((df$fifth_promo/365), digits = 5)
 
-write.csv(df, "ILP_ok_we_got_this.csv",na = "",
+write.csv(Join_dat_all, "ILP_ok_we_got_this_finito.csv",na = "",
           row.names = FALSE,
           col.names = TRUE,
           append = TRUE,
