@@ -1,0 +1,146 @@
+setwd('C:/Users/dherlu494/Comcast/Innovation & Product - Documents/Data Science/Compensation/ILP')
+library(readxl)
+library("RH2")
+library("dplyr")
+library("tidyr")
+library("sqldf")
+library("plyr")
+dat2<- read.csv("ILP_Redo_3.6.csv", header = TRUE)
+
+//**coding job levels to indicate eventually what was a job level promotion**\\
+
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Support 1')] <- 1
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Support 2')] <- 2
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Support 3')] <- 3
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Support 4')] <- 4
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Support 5')] <- 5
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Supervisor')] <- 6
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Professional 1')] <- 7
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Professional 2')] <- 8
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Professional 3')] <- 9
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Professional 4')] <- 10
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Professional 5')] <- 11
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Professional 6')] <- 12
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Professional 7')] <- 13
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Professional 8')] <- 14
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Professional 9')] <- 15
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Manager 1')] <- 16
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Manager 2')] <- 17
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Director 1')] <- 18
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Director 2')] <- 19
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Director 3')] <- 20
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Vice President 1')] <- 21
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Vice President 2')] <- 22
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Vice President 3')] <- 23
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Vice President 4')] <- 24
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Executive 1')] <- 25
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Executive 2')] <- 26
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Executive 3')] <- 27
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Executive 4')] <- 28
+dat2$Prev_Job_Level_Coded[dat2$Prev_Job_Level==('Executive 5')] <- 29
+
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Support 1')] <- 1
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Support 2')] <- 2
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Support 3')] <- 3
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Support 4')] <- 4
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Support 5')] <- 5
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Supervisor')] <- 6
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Professional 1')] <- 7
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Professional 2')] <- 8
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Professional 3')] <- 9
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Professional 4')] <- 10
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Professional 5')] <- 11
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Professional 6')] <- 12
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Professional 7')] <- 13
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Professional 8')] <- 14
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Professional 9')] <- 15
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Manager 1')] <- 16
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Manager 2')] <- 17
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Director 1')] <- 18
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Director 2')] <- 19
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Director 3')] <- 20
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Vice President 1')] <- 21
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Vice President 2')] <- 22
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Vice President 3')] <- 23
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Vice President 4')] <- 24
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Executive 1')] <- 25
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Executive 2')] <- 26
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Executive 3')] <- 27
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Executive 4')] <- 28
+dat2$Job_Level_Coded[dat2$Job_Level_ID==('Executive 5')] <- 29
+
+dat2$Job_Level_Diff <- dat2$Job_Level_Coded - dat2$Prev_Job_Level_Coded
+
+
+//*removing records where the Previous Annual Salary was '0' since they most likely are new hires*\\
+dat3<- dat2[which (dat$Prev_Annual_Salary > 0),]
+//*reduces from 142K records to 69.4K records*\\
+
+//**creating indicator fields for Job Level(greater than 0), AS, ABBR, AS+ABBR promos (>=.03)**\\
+dat3$Job_Level_Promo[dat3$Job_Level_Diff > 0] <- 1 
+dat3$Job_Level_Promo[dat3$Job_Level_Diff == 0] <- 0 
+
+dat3$AS_diff <- (dat3$Annual_salary) - (dat3$Prev_Annual_Salary)
+dat3$AS_diff_perc <- round((dat3$AS_diff)/(dat3$Prev_Annual_Salary), digits = 5)
+dat3$AS_Promo[dat3$AS_diff_perc >= .03] <- 1
+dat3$AS_Promo[dat3$AS_diff_perc < .03] <- 0
+
+dat3$ABBR_diff <- (dat3$Annual_ABBR) - (dat3$Pre_Annual_ABBR)
+dat3$ABBR_diff_perc <- round((dat3$ABBR_diff)/(dat3$Pre_Annual_ABBR), digits = 5)
+dat3$ABBR_promo[dat3$ABBR_diff_perc >= .03] <- 1
+dat3$ABBR_promo[dat3$ABBR_diff_perc < .03] <- 0
+
+dat3$AS_ABBR_sum <- (dat3$Annual_salary) + (dat3$Annual_ABBR)
+dat3$prev_AS_ABBR_sum <- (dat3$Prev_Annual_Salary) + (dat3$Pre_Annual_ABBR)
+dat3$AS_ABBR_sum_diff <- (dat3$AS_ABBR_sum) - (dat3$prev_AS_ABBR_sum)
+dat3$AS_ABBR_diff_perc <- round((dat3$AS_ABBR_sum_diff)/(dat3$prev_AS_ABBR_sum), digits = 5)
+dat3$AS_ABBR_promo[dat3$AS_ABBR_diff_perc >= .03] <- 1
+dat3$AS_ABBR_promo[dat3$AS_ABBR_diff_perc < .03] <- 0
+
+write.csv(dat3, "ILP_better.csv",na = "",
+          row.names = FALSE,
+          col.names = TRUE,
+          append = TRUE,
+          sep = ",")
+
+//*if we remove AS_ABBR_promos and AS_promos that are not 3%+, then we have 38.9K records vs 69.4K records*\\
+dat4<- dat3[which (dat3$AS_ABBR_promo == 1),]
+dat5<- dat4[which (dat4$AS_Promo == 1),]
+write.csv(dat5, "ILP_better_removed_no_promos.csv",na = "",
+          row.names = FALSE,
+          col.names = TRUE,
+          append = TRUE,
+          sep = ",")
+View(dat5)
+dat<- dat5
+//*based on PERNR, count total # of promotions + add in the sequence of each promotion*\\
+dat$total_promos <- with(dat, ave(PERNR, PERNR, FUN=length))
+dat$promo_sequence <- with(dat, ave(PERNR, PERNR, FUN=seq_along))
+
+
+//*Create the wide dataset by LEFT joins*\\
+Seq_dat_1 <- dat[which(dat$promo_sequence == '1'),]
+Seq_dat_1_a <- Seq_dat_1[,c(1:4,6:35,37:44, 51,52,54:70)]
+Seq_dat_2 <- dat[which(dat$promo_sequence == '2'),]
+Seq_dat_2_a <- Seq_dat_2[,c(1:4, 6:25, 27:31, 33:35,37:44, 52, 54:70)]
+Join_dat_1<- join(Seq_dat_1_a, Seq_dat_2_a, type = 'left', by = 'PERNR')
+
+Seq_dat_3<- dat[which(dat$promo_sequence == '3'),]
+Seq_dat_4<- dat[which(dat$promo_sequence == '4'),]
+Seq_dat_5<- dat[which(dat$promo_sequence == '5'),]
+
+Seq_dat_3_a <- Seq_dat_3[,c(1:4, 6:25, 27:31, 33:35,37:44, 52, 54:70)]
+Join_dat_2<- join(Join_dat_1, Seq_dat_3_a, type = 'left', by = 'PERNR')
+
+Seq_dat_4_a <- Seq_dat_4[,c(1:4, 6:25, 27:31, 33:35,37:44, 52, 54:70)]
+Join_dat_3<- join(Join_dat_2, Seq_dat_4_a, type = 'left', by = 'PERNR')
+
+Seq_dat_5_a <- Seq_dat_5[,c(1:4, 6:25, 27:31, 33:35,37:44, 52, 54:70)]
+Join_dat_all<- join(Join_dat_3, Seq_dat_5_a, type = 'left', by = 'PERNR')
+
+View(Join_dat_all)
+write.csv(Join_dat_all, "ILP_ok_we_got_this.csv",na = "",
+          row.names = FALSE,
+          col.names = TRUE,
+          append = TRUE,
+          sep = ",")
