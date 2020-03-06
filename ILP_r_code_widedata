@@ -163,7 +163,7 @@ df$fifth_promo <- difftime(as.Date(df$Action_Start_Date_5,format = "%m/%d/%Y"),a
 df$fifth_promo_months <- round(((df$fifth_promo/365)*12), digits = 5)
 df$fifth_promo_years <- round((df$fifth_promo/365), digits = 5)
 
-write.csv(Join_dat_all, "ILP_ok_we_got_this.csv",na = "",
+write.csv(df, "ILP_ok_we_got_this.csv",na = "",
           row.names = FALSE,
           col.names = TRUE,
           append = TRUE,
