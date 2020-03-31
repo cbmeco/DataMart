@@ -1,0 +1,228 @@
+####################    
+#Just need Numpy, Pandas and Matplotlib is for the graph, directory is just to spit out dataframe
+import os
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import json
+import csv
+
+main_dir =  "C:\\Users\\ccolam127\\OneDrive - Comcast" #change this to data-science-academy
+data_dir = main_dir + "\COVID\SIR Model\county_test"
+
+# there's some warnings and they were annoying so this removes them
+# i dont do data science, figure it out
+# https://stackoverflow.com/questions/20625582/how-to-deal-with-settingwithcopywarning-in-pandas
+pd.options.mode.chained_assignment = None
+
+state_countydict = {'day':[0], 'cases':[0], 'County':['starter_county'], 'State':['starter_state'], 'doubling_rate':[2]} 
+
+county_state_df = pd.DataFrame(state_countydict) 
+
+
+data_dict_ex = {'day':[0], 'cases':[0], 'County':['starter_county'], 'State':['starter_state']} 
+union = pd.DataFrame(data_dict_ex)
+
+def iterate(nyt_file_name, census_file_name):
+    
+    population_json_data = ''
+    with open(census_file_name, 'r') as f:
+        population_json_data = json.load(f)
+
+    # print(population_json_data)
+
+    file=open(nyt_file_name, "r")
+    us_counties = csv.reader(file)
+
+    population_dict = {}
+    county_graphs = {}
+    county_df = {}
+
+    for county in us_counties:
+        population = population_json_data.get(county[3])
+        if population:
+            population_dict[county[3]] = [county[1], county[2], population, county[4]]
+
+    for key in population_dict:
+        data = population_dict[key]
+        county = data[0]
+        state = data[1]
+        population = data[2]
+        infected = data[3]
+        fips = key
+        mecos_wildcard_math(population, infected, county, state, fips)
+        
+    #for df in [county_state_df]:
+        #df_test = union.append(county_state_df, True)
+    
+    
+
+        
+def mecos_wildcard_math(population, infected, county, state, fips):
+    #####INPUTS###########
+    #S for Susceptible, = Regional Population (set to NY State)
+    S = int(population) or 20100000
+
+    #Comcast EE Count in Region - used to subset cases, can remove if you want to run for the full regional population
+    C_EE = 8968
+
+    #I for Infections, Current count of Infections in the Region 
+    Inf = int(infected) or 38977
+
+    #Rate of Dection - Attempts to account for under-testing
+    RoD = 0.15
+
+    #Comcast Pop as Proportion of Regional Pop
+    com_pop = (C_EE)/S
+
+    #Doubling time - used instead of a R0 but essentially the same thing. This input is the most important to the shape of the curve.
+    doubling_time = 4 #3 day doubling time to start
+
+    #Recovery days - time it takes someone to recover, really just impacts the back end of curve
+    recovery_days = 14.0
+
+    ####################
+    #Initial calculations and setting of parameters. Gamma, Beta and the intrinsitc growth rate are
+    # what make the math work. First line is just defining SIR. R is honestly not even necessary.
+    S, I, R = S, (Inf/RoD), 0
+    n_days = 200
+    gamma = 1 / recovery_days
+    hosp_los=1
+    intrinsic_growth_rate = 2 ** (1 / doubling_time) - 1
+    beta = (
+        intrinsic_growth_rate + gamma) / S
+        
+
+    ##UPDATE YOUR DIRECTORY FOR .CSV OUTPUT
+    #main_dir =  "C:\\Users\\ccolam127\\OneDrive - Comcast" 
+    #data_dir = main_dir + "\COVID\SIR Model\county_test"
+
+    ###################
+    # The SIR model, one time step
+    def sir(y, beta, gamma, N):
+        S, I, R = y
+        Sn = (-beta * S * I) + S
+        In = (beta * S * I - gamma * I) + I
+        Rn = gamma * I + R
+        if Sn < 0:
+            Sn = 0
+        if In < 0:
+            In = 0
+        if Rn < 0:
+            Rn = 0
+
+        scale = N / (Sn + In + Rn)
+        return Sn * scale, In * scale, Rn * scale
+    ###########################
+    #SIR Model to move forward in time
+    def sim_sir(S, I, R, beta, gamma, n_days, beta_decay=None):
+        N = S + I + R
+        s, i, r = [S], [I], [R]
+        for day in range(n_days):
+            y = S, I, R
+            S, I, R = sir(y, beta, gamma, N)
+            if beta_decay:
+                beta = beta * (1 - beta_decay)
+            s.append(S)
+            i.append(I)
+            r.append(R)
+
+        s, i, r = np.array(s), np.array(i), np.array(r)
+        return s, i, r
+    beta_decay = 0.0
+    s, i, r = sim_sir(S, I, R, beta, gamma, n_days, beta_decay=beta_decay)
+    ############################
+
+    #This step can be removed to run for the full population. At this point you have what we've come here to do
+    # a forecast of the number of infections over time. The rest is formatting and graph making. 
+
+    cases = i #* com_pop
+
+    ############################
+    #These next steps could probably simplified but they work for me so I didn't mess with them.
+    #If you just make a DF with the cases above that's enough. 
+
+    days = np.array(range(0, n_days + 1))
+    data_list = [days, cases#, icu, ventf
+                 ]
+    data_dict = dict(zip(["day", "cases"], data_list))
+
+    projection = pd.DataFrame.from_dict(data_dict)
+
+    projection_admits = projection.iloc[:-1, :] 
+    projection_admits[projection_admits < 0] = 0
+
+    plot_projection_days = n_days
+    projection_admits["day"] = range(projection_admits.shape[0])
+
+    ############################
+    #For the chart and the dataframe
+
+    los_dict = {
+        "cases": hosp_los#,
+        #"state": hosp_los,
+        #"county": hosp_los,
+        #"icu": icu_los,
+        #"vent": vent_los,
+    }
+
+    fig, ax = plt.subplots(1, 1, figsize=(10, 4))
+
+    census_dict = {}
+    for k, los in los_dict.items():
+        census = (
+            projection_admits.cumsum().iloc[:-los, :]
+            - projection_admits.cumsum().shift(los).fillna(0)
+        ).apply(np.ceil)
+        census_dict[k] = census[k]
+        ax.plot(census.head(plot_projection_days)[k], ".-", label="census")
+        ax.legend(loc=0)
+
+    ax.set_xlabel("Days from today")
+    ax.grid("on")
+    ax.set_ylabel("Census")
+
+    ############################
+    census_df = pd.DataFrame(census_dict)
+    census_df["day"] = census_df.index
+    census_df = census_df[["day", "cases"#, "county", "state"#, "icu", "vent"
+                           ]]
+
+    census_table = census_df[np.mod(census_df.index, 7) == 0].copy()
+    census_table.index = range(census_table.shape[0])
+    census_table.loc[0, :] = 0
+    census_table = census_table.dropna().astype(int)
+    #print(county, state, fips)
+    #print(census_df)
+    countydf = pd.DataFrame([county], columns=['County'])
+    #print(countydf)
+    statedf = pd.DataFrame([state], columns=['State'])
+    doublingdf = pd.DataFrame([doubling_time], columns=['doubling_rate'])
+
+    
+    county_state_df = pd.concat([census_df,countydf, statedf, doublingdf], axis=1)
+    
+    #union_df = union.merge(county_state_df, #on=axis,
+     #                      how='outer')
+    county_state_df['County'] =  county_state_df['County'].fillna(value=county)
+    county_state_df['State'] =  county_state_df['State'].fillna(value=state)
+    county_state_df['doubling_rate'] =  county_state_df['doubling_rate'].fillna(value=doubling_time)
+    
+    
+    #print(county_state_df)
+    agg_data = county_state_df[county_state_df['day'].isin([0,7,14,21,28,35,42,49,56,63,70,77,84,91,98,105,112,119,126])]
+    #print(agg_data)
+    agg_data.to_csv('County_update_331.csv',mode= 'a', header = False) 
+    
+    
+    # there were some warning logs about open figures, idk man
+    # the below removes that warning by closing it explicitly
+    # https://stackoverflow.com/questions/21884271/warning-about-too-many-open-figures
+    plt.close('all')
+    #print(df_test)
+
+# add your own file names here
+iterate('C:\\Users\\ccolam127\\OneDrive - Comcast\COVID\SIR Model\counties_329.csv', 'C:\\Users\\ccolam127\\OneDrive - Comcast\COVID\SIR Model\population.json')
+
+#union_df = union.append(county_state_df)
+#print(union_df)
