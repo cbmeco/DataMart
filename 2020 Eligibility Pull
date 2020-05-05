@@ -1,0 +1,170 @@
+select distinct(c.emp_ssn) as Emp_SSN,
+sum(c.No_Coverage) over (partition by c.emp_ssn) as No_Coverage,
+sum(c.IBC_PAY_NOW) over (partition by c.emp_ssn) as IBC_PAY_NOW,
+sum(c.IBC_Pay_Later) over (partition by c.emp_ssn) as IBC_Pay_Later,
+sum(c.IBC_other) over (partition by c.emp_ssn) as IBC_other,
+sum(c.Kaiser) over (partition by c.emp_ssn) as Kaiser,
+sum(c.Tufts) over (partition by c.emp_ssn) as Tufts,
+sum(c.UHC) over (partition by c.emp_ssn) as UHC,
+max(c.Med_EE_ONLY) over (partition by c.emp_ssn) as Med_EE_Only,
+max(c.Med_EEandChildren)  over (partition by c.emp_ssn) as Med_EE_CHildren,
+max(c.Med_EEandSpouse)  over (partition by c.emp_ssn) as Med_EE_Spouse,
+max(c.Med_EE_Fam)  over (partition by c.emp_ssn) as Med_EE_Fam,
+max(c.[Med_no coverage])  over (partition by c.emp_ssn) as Med_Cov_None,
+sum(c.Aetna_DMO) over (partition by c.emp_ssn) as Aetna_DMO,
+sum(c.UCCI_adv_plus) over (partition by c.emp_ssn) as UCCI_adv_plus,
+sum(c.UCCI_Indemnity) over (partition by c.emp_ssn) as UCCI_Indemnity,
+sum(c.No_dental) over (partition by c.emp_ssn) as No_dental,
+max(c.Den_EE_ONLY) over (partition by c.emp_ssn) as Den_EE_Only,
+max(c.Den_EEandChildren)  over (partition by c.emp_ssn) as Den_EE_CHildren,
+max(c.Den_EEandSpouse)  over (partition by c.emp_ssn) as Den_EE_Spouse,
+max(c.Den_EE_Fam)  over (partition by c.emp_ssn) as Den_EE_Fam,
+max(c.[Den_no coverage])  over (partition by c.emp_ssn) as Den_None,
+sum(c.Davis) over (partition by c.emp_ssn) as Davis,
+sum(c.VSP) over (partition by c.emp_ssn) as VSP,
+sum(c.Davis_with_safety) over (partition by c.emp_ssn) as Davis_with_safety,
+sum(c.VSP_with_safety) over (partition by c.emp_ssn) as VSP_with_safety,
+max(c.Eye_EE_ONLY) over (partition by c.emp_ssn) as Eye_EE_Only,
+max(c.Eye_EEandChildren)  over (partition by c.emp_ssn) as Eye_EE_CHildren,
+max(c.Eye_EEandSpouse)  over (partition by c.emp_ssn) as Eye_EE_Spouse,
+max(c.Eye_EE_Fam)  over (partition by c.emp_ssn) as Eye_EE_Fam,
+max(c.[Eye_no coverage])  over (partition by c.emp_ssn) as Eye_None,
+max(c.Tobacco_user)   over (partition by c.emp_ssn) as Tobacco_User,
+max(c.tobacco_non_user)   over (partition by c.emp_ssn) as Tobacco_non_user,
+c.reporting_location,
+c.work_location,
+c.reg_temp,
+c.category,
+c.emp_fname,
+c.emp_lname,
+c.emp_id,
+c.emp_dob,
+c.hire_date,
+c.rehire_date,
+c.marital_status,
+c.division,
+c.org_key,
+c.pay_frequency,
+c.job_desc
+
+from(
+select 
+distinct(a.emp_ssn),
+case
+	when a.benefit_id = '1' and a.option_id = 0 then 1
+	else 0 end as 'No_Coverage',
+case
+	when a.benefit_id = '1' and a.option_id = 200 then 1
+	else 0 end as 'IBC_PAY_NOW',
+case
+	when a.benefit_id = '1' and a.option_id = 215 then 1
+	else 0 end as 'IBC_Pay_Later',
+case
+	when a.benefit_id = '1' and a.option_id in ('237','233','232','231') then 1
+	else 0 end as 'IBC_other',
+case
+	when a.benefit_id = '1' and a.option_id in ('460','472','467','474','476','478','481') then 1
+	else 0 end as 'Kaiser',
+case
+	when a.benefit_id = '1' and a.option_id = '554' then 1
+	else 0 end as 'Tufts',
+case
+	when a.benefit_id = '1' and a.option_id in ('610', '615', '632', '605','620','622','621') then 1
+	else 0 end as 'UHC',
+case
+	when a.benefit_id = '1' and a.tier_id = '1' then 1 
+	else 0 end as 'Med_EE_ONLY',
+case
+	when a.benefit_id = '1' and a.tier_id = '2' then 1
+	else 0 end as 'Med_EEandSpouse',
+case
+	when a.benefit_id = '1' and a.tier_id = '3' then 1 
+	else 0 end as 'Med_EEandChildren',
+case
+	when a.benefit_id = '1' and a.tier_id = '4' then 1 
+	else 0 end as 'Med_EE_Fam',
+case
+	when a.benefit_id = '1' and a.tier_id = '0' then 1
+	else '0' end as 'Med_no coverage'
+, case
+	when a.benefit_id = '2' and a.option_id = '1' then 1
+	else 0 end as 'Aetna_DMO',
+case
+	when a.benefit_id = '2' and a.option_id in ('2','3') then 1
+	else 0 end as 'UCCI_adv_plus',
+case
+	when a.benefit_id = '2' and a.option_id = '4' then 1
+	else 0 end as 'UCCI_Indemnity',
+case
+	when a.benefit_id = '2' and a.option_id = '0' then 1
+	else 0 end as 'No_dental',
+	case
+	when a.benefit_id = '2' and a.tier_id = '1' then 1 
+	else 0 end as 'Den_EE_ONLY',
+case
+	when a.benefit_id = '2' and a.tier_id = '2' then 1
+	else 0 end as 'Den_EEandSpouse',
+case
+	when a.benefit_id = '2' and a.tier_id = '3' then 1 
+	else 0 end as 'Den_EEandChildren',
+case
+	when a.benefit_id = '2' and a.tier_id = '4' then 1 
+	else 0 end as 'Den_EE_Fam',
+case
+	when a.benefit_id = '2' and a.tier_id = '0' then 1
+	else '0' end as 'Den_no coverage'
+, 
+case
+	when a.benefit_id = '3' and a.option_id in ('4','5','6') then 1
+	else 0 end as 'Davis',
+case
+	when a.benefit_id = '3' and a.option_id = '8' then 1
+	else 0 end as 'VSP',
+case
+	when a.benefit_id = '3' and a.option_id = '9' then 1
+	else 0 end as 'Davis_with_safety',
+
+case
+	when a.benefit_id = '3' and a.option_id = '10' then 1
+	else 0 end as 'VSP_with_safety',
+		case
+	when a.benefit_id = '3' and a.tier_id = '1' then 1 
+	else 0 end as 'Eye_EE_ONLY',
+case
+	when a.benefit_id = '3' and a.tier_id = '2' then 1
+	else 0 end as 'Eye_EEandSpouse',
+case
+	when a.benefit_id = '3' and a.tier_id = '3' then 1 
+	else 0 end as 'Eye_EEandChildren',
+case
+	when a.benefit_id = '3' and a.tier_id = '4' then 1 
+	else 0 end as 'Eye_EE_Fam',
+case
+	when a.benefit_id = '3' and a.tier_id = '0' then 1
+	else '0' end as 'Eye_no coverage'
+,
+case
+	when a.benefit_id = '45' and a.option_id = '1' then 1
+	else 0 end as 'Tobacco_user',
+case
+	when a.benefit_id = '45' and a.option_id = '0' then 1
+	else 0 end as 'Tobacco_Non_User',
+b.reporting_location,
+b.work_location,
+b. reg_temp,
+b.category,
+b.emp_fname,
+b.emp_lname,
+b.emp_id,
+b.emp_dob,
+b.hire_date,
+b.rehire_date,
+b.marital_status,
+b.division,
+b.org_key,
+b.pay_frequency,
+b.job_desc
+from [dbo].[WTW_Employee_Elections] a 
+left join dbo.wtw_employee_eligibility b
+on a.emp_ssn = b.emp_ssn) c
+order by c.Emp_SSN
